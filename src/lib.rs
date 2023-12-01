@@ -11,14 +11,12 @@ pub trait Day {
     fn part_2(input: &Self::ParsedInput) -> Result<Self::Output2, Error>;
 }
 
-pub fn run_challenge<T: Day>(
-    input: &str,
-    part_1_prompt: &str,
-    part_2_prompt: &str,
-) -> Result<(), Error> {
-    let parsed_input = T::parse_input(input)?;
-    println!("Part 1 {part_1_prompt}: {}", T::part_1(&parsed_input)?);
-    println!("Part 2 {part_2_prompt}: {}", T::part_2(&parsed_input)?);
+pub fn run_day<T: Day>(day_number: usize, input: &str) -> Result<(), Error> {
+    println!("==== Day {day_number:02} ====");
+
+    let parsed_input = T::parse_input(&std::fs::read_to_string(input)?)?;
+    println!("Part 1 solution: {}", T::part_1(&parsed_input)?);
+    println!("Part 2 solution: {}", T::part_2(&parsed_input)?);
 
     Ok(())
 }
