@@ -9,8 +9,8 @@ struct Day01;
 
 impl Day01 {
     fn str_to_double_digit_number(input: &str) -> Option<usize> {
-        let first_digit = input.chars().flat_map(|c| c.to_digit(10)).next();
-        let last_digit = input.chars().rev().flat_map(|c| c.to_digit(10)).next();
+        let first_digit = input.chars().find_map(|c| c.to_digit(10));
+        let last_digit = input.chars().rev().find_map(|c| c.to_digit(10));
 
         Some((first_digit? * 10 + last_digit?) as usize)
     }
