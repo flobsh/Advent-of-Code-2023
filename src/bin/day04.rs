@@ -58,7 +58,15 @@ impl aoc_2023::Day for Day04 {
     }
 
     fn part_2(input: &Self::ParsedInput) -> Result<Self::Output2, aoc_2023::Error> {
-        todo!()
+        let mut card_copies = vec![1; input.len()];
+
+        for (i, card) in input.iter().enumerate() {
+            for j in i + 1..std::cmp::min(i + 1 + card.matching_numbers(), card_copies.len()) {
+                card_copies[j] += card_copies[i];
+            }
+        }
+
+        Ok(card_copies.iter().sum())
     }
 }
 
@@ -74,8 +82,15 @@ mod tests {
 
     #[test]
     fn part_1() {
-        let input = std::fs::read_to_string("inputs/tests/day04_p1.txt").unwrap();
+        let input = std::fs::read_to_string("inputs/tests/day04.txt").unwrap();
         let parsed_input = Day04::parse_input(&input).unwrap();
         assert_eq!(Day04::part_1(&parsed_input).unwrap(), 13);
+    }
+
+    #[test]
+    fn part_2() {
+        let input = std::fs::read_to_string("inputs/tests/day04.txt").unwrap();
+        let parsed_input = Day04::parse_input(&input).unwrap();
+        assert_eq!(Day04::part_2(&parsed_input).unwrap(), 30);
     }
 }
