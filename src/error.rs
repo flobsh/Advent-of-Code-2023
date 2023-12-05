@@ -4,6 +4,7 @@ use std::fmt;
 pub enum Error {
     GenericError,
     IoError(std::io::Error),
+    ParseIntError(std::num::ParseIntError),
 }
 
 impl fmt::Display for Error {
@@ -11,6 +12,7 @@ impl fmt::Display for Error {
         match self {
             Self::GenericError => write!(f, "Generic error"),
             Self::IoError(err) => err.fmt(f),
+            Self::ParseIntError(err) => err.fmt(f),
         }
     }
 }
@@ -20,6 +22,7 @@ impl std::error::Error for Error {
         match self {
             Self::GenericError => None,
             Self::IoError(err) => Some(err),
+            Self::ParseIntError(err) => Some(err),
         }
     }
 }
@@ -27,5 +30,11 @@ impl std::error::Error for Error {
 impl From<std::io::Error> for Error {
     fn from(value: std::io::Error) -> Self {
         Self::IoError(value)
+    }
+}
+
+impl From<std::num::ParseIntError> for Error {
+    fn from(value: std::num::ParseIntError) -> Self {
+        Self::ParseIntError(value)
     }
 }
