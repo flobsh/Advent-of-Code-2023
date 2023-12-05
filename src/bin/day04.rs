@@ -7,6 +7,14 @@ struct Card {
     canditate_numbers: HashSet<usize>,
 }
 
+impl Card {
+    fn matching_numbers(&self) -> usize {
+        self.winning_numbers
+            .intersection(&self.canditate_numbers)
+            .count()
+    }
+}
+
 impl FromStr for Card {
     type Err = aoc_2023::Error;
 
@@ -45,13 +53,7 @@ impl aoc_2023::Day for Day04 {
     fn part_1(input: &Self::ParsedInput) -> Result<Self::Output1, aoc_2023::Error> {
         Ok(input
             .iter()
-            .map(|card| {
-                1 << card
-                    .winning_numbers
-                    .intersection(&card.canditate_numbers)
-                    .count()
-                    >> 1
-            })
+            .map(|card| 1 << card.matching_numbers() >> 1)
             .sum())
     }
 
