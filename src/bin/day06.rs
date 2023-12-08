@@ -1,5 +1,6 @@
 use aoc_2023;
 
+#[derive(Debug, Default)]
 struct Race {
     time: usize,
     distance: usize,
@@ -101,7 +102,13 @@ impl aoc_2023::Day for Day06 {
     }
 
     fn part_2(input: &Self::ParsedInput) -> Result<Self::Output2, aoc_2023::Error> {
-        todo!()
+        let race = input.iter().fold(Race::default(), |race, r| Race {
+            time: race.time * 10_usize.pow(r.time.ilog10() + 1) + r.time,
+            distance: race.distance * 10_usize.pow(r.distance.ilog10() + 1) + r.distance,
+        });
+
+        let (lower_bound, upper_bound) = race.winning_time_bounds();
+        Ok(upper_bound - lower_bound + 1)
     }
 }
 
@@ -129,5 +136,12 @@ mod tests {
         let input = std::fs::read_to_string("inputs/tests/day06.txt").unwrap();
         let parsed_input = Day06::parse_input(&input).unwrap();
         assert_eq!(Day06::part_1(&parsed_input).unwrap(), 288);
+    }
+
+    #[test]
+    fn part_2() {
+        let input = std::fs::read_to_string("inputs/tests/day06.txt").unwrap();
+        let parsed_input = Day06::parse_input(&input).unwrap();
+        assert_eq!(Day06::part_2(&parsed_input).unwrap(), 71503);
     }
 }
